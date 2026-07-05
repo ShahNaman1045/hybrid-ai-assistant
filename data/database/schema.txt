@@ -1,0 +1,272 @@
+Table: addresses
+  - address_id (INTEGER)
+  - street (VARCHAR(255))
+  - city (VARCHAR(120))
+  - state (VARCHAR(50))
+  - postal_code (VARCHAR(20))
+  - region_id (INTEGER)
+  Primary Key: address_id
+  Foreign Keys:
+    region_id -> regions.region_id
+
+Table: customers
+  - customer_id (INTEGER)
+  - customer_name (VARCHAR(255))
+  - email (VARCHAR(255))
+  - phone (VARCHAR(50))
+  - address_id (INTEGER)
+  - segment (TEXT)
+  - customer_since (DATE)
+  Primary Key: customer_id
+  Foreign Keys:
+    address_id -> addresses.address_id
+
+Table: departments
+  - department_id (INTEGER)
+  - department_name (VARCHAR(100))
+  Primary Key: department_id
+
+Table: employees
+  - employee_id (INTEGER)
+  - first_name (VARCHAR(100))
+  - last_name (VARCHAR(100))
+  - email (VARCHAR(255))
+  - department_id (INTEGER)
+  - manager_id (INTEGER)
+  - job_title (VARCHAR(150))
+  - hire_date (DATE)
+  - salary (REAL)
+  Primary Key: employee_id
+  Foreign Keys:
+    department_id -> departments.department_id
+    manager_id -> employees.employee_id
+
+Table: incentive_payouts
+  - payout_id (INTEGER)
+  - employee_id (INTEGER)
+  - period (VARCHAR(20))
+  - bonus_amount (REAL)
+  - reason (VARCHAR(255))
+  - approved_by (INTEGER)
+  Primary Key: payout_id
+  Foreign Keys:
+    employee_id -> employees.employee_id
+    approved_by -> employees.employee_id
+
+Table: inventory
+  - inventory_id (INTEGER)
+  - product_id (INTEGER)
+  - warehouse_id (INTEGER)
+  - quantity_on_hand (INTEGER)
+  - reorder_level (INTEGER)
+  Primary Key: inventory_id
+  Foreign Keys:
+    product_id -> products.product_id
+    warehouse_id -> warehouses.warehouse_id
+
+Table: invoices
+  - invoice_id (INTEGER)
+  - order_id (INTEGER)
+  - invoice_date (DATE)
+  - due_date (DATE)
+  - total_amount (REAL)
+  - status (TEXT)
+  Primary Key: invoice_id
+  Foreign Keys:
+    order_id -> orders.order_id
+
+Table: order_items
+  - order_item_id (INTEGER)
+  - order_id (INTEGER)
+  - product_id (INTEGER)
+  - quantity (INTEGER)
+  - unit_price (REAL)
+  - discount_pct (REAL)
+  Primary Key: order_item_id
+  Foreign Keys:
+    order_id -> orders.order_id
+    product_id -> products.product_id
+
+Table: orders
+  - order_id (INTEGER)
+  - customer_id (INTEGER)
+  - employee_id (INTEGER)
+  - order_date (DATE)
+  - status (TEXT)
+  - region_id (INTEGER)
+  Primary Key: order_id
+  Foreign Keys:
+    customer_id -> customers.customer_id
+    employee_id -> employees.employee_id
+    region_id -> regions.region_id
+
+Table: payments
+  - payment_id (INTEGER)
+  - invoice_id (INTEGER)
+  - payment_date (DATE)
+  - amount (REAL)
+  - method (VARCHAR(50))
+  Primary Key: payment_id
+  Foreign Keys:
+    invoice_id -> invoices.invoice_id
+
+Table: product_categories
+  - category_id (INTEGER)
+  - category_name (VARCHAR(150))
+  - description (VARCHAR(500))
+  Primary Key: category_id
+
+Table: products
+  - product_id (INTEGER)
+  - sku (VARCHAR(50))
+  - product_name (VARCHAR(255))
+  - category_id (INTEGER)
+  - unit_price (REAL)
+  - unit_cost (REAL)
+  - is_active (INTEGER)
+  Primary Key: product_id
+  Foreign Keys:
+    category_id -> product_categories.category_id
+
+Table: purchase_order_items
+  - po_item_id (INTEGER)
+  - po_id (INTEGER)
+  - product_id (INTEGER)
+  - quantity (INTEGER)
+  - unit_cost (REAL)
+  Primary Key: po_item_id
+  Foreign Keys:
+    po_id -> purchase_orders.po_id
+    product_id -> products.product_id
+
+Table: purchase_orders
+  - po_id (INTEGER)
+  - vendor_id (INTEGER)
+  - employee_id (INTEGER)
+  - po_date (DATE)
+  - status (TEXT)
+  - expected_delivery (DATE)
+  Primary Key: po_id
+  Foreign Keys:
+    vendor_id -> vendors.vendor_id
+    employee_id -> employees.employee_id
+
+Table: regions
+  - region_id (INTEGER)
+  - region_name (VARCHAR(100))
+  - country (VARCHAR(100))
+  Primary Key: region_id
+
+Table: returns
+  - return_id (INTEGER)
+  - order_item_id (INTEGER)
+  - return_date (DATE)
+  - reason (VARCHAR(255))
+  - refund_amount (REAL)
+  Primary Key: return_id
+  Foreign Keys:
+    order_item_id -> order_items.order_item_id
+
+Table: sales_targets
+  - target_id (INTEGER)
+  - team_id (INTEGER)
+  - period (VARCHAR(20))
+  - target_amount (REAL)
+  - achieved_amount (REAL)
+  - avg_csat_score (REAL)
+  Primary Key: target_id
+  Foreign Keys:
+    team_id -> sales_teams.team_id
+
+Table: sales_teams
+  - team_id (INTEGER)
+  - team_name (VARCHAR(150))
+  - region_id (INTEGER)
+  - manager_id (INTEGER)
+  Primary Key: team_id
+  Foreign Keys:
+    region_id -> regions.region_id
+    manager_id -> employees.employee_id
+
+Table: team_members
+  - team_member_id (INTEGER)
+  - team_id (INTEGER)
+  - employee_id (INTEGER)
+  - role_on_team (VARCHAR(100))
+  Primary Key: team_member_id
+  Foreign Keys:
+    team_id -> sales_teams.team_id
+    employee_id -> employees.employee_id
+
+Table: travel_expenses
+  - expense_id (INTEGER)
+  - travel_request_id (INTEGER)
+  - expense_date (DATE)
+  - expense_type (TEXT)
+  - amount (REAL)
+  - currency (VARCHAR(10))
+  - receipt_provided (INTEGER)
+  - notes (VARCHAR(500))
+  Primary Key: expense_id
+  Foreign Keys:
+    travel_request_id -> travel_requests.travel_request_id
+
+Table: travel_requests
+  - travel_request_id (INTEGER)
+  - employee_id (INTEGER)
+  - destination_country (VARCHAR(100))
+  - destination_city (VARCHAR(100))
+  - trip_type (TEXT)
+  - purpose (VARCHAR(255))
+  - start_date (DATE)
+  - end_date (DATE)
+  - status (TEXT)
+  - approved_by (INTEGER)
+  Primary Key: travel_request_id
+  Foreign Keys:
+    employee_id -> employees.employee_id
+    approved_by -> employees.employee_id
+
+Table: vendor_contracts
+  - contract_id (INTEGER)
+  - vendor_id (INTEGER)
+  - start_date (DATE)
+  - end_date (DATE)
+  - payment_terms_days (INTEGER)
+  - early_payment_discount_pct (REAL)
+  - status (TEXT)
+  Primary Key: contract_id
+  Foreign Keys:
+    vendor_id -> vendors.vendor_id
+
+Table: vendor_invoices
+  - vendor_invoice_id (INTEGER)
+  - po_id (INTEGER)
+  - invoice_date (DATE)
+  - due_date (DATE)
+  - amount (REAL)
+  - paid_amount (REAL)
+  - status (TEXT)
+  Primary Key: vendor_invoice_id
+  Foreign Keys:
+    po_id -> purchase_orders.po_id
+
+Table: vendors
+  - vendor_id (INTEGER)
+  - vendor_name (VARCHAR(255))
+  - vendor_tier (TEXT)
+  - contact_email (VARCHAR(255))
+  - contact_phone (VARCHAR(50))
+  - address_id (INTEGER)
+  Primary Key: vendor_id
+  Foreign Keys:
+    address_id -> addresses.address_id
+
+Table: warehouses
+  - warehouse_id (INTEGER)
+  - warehouse_name (VARCHAR(150))
+  - address_id (INTEGER)
+  - capacity_units (INTEGER)
+  Primary Key: warehouse_id
+  Foreign Keys:
+    address_id -> addresses.address_id

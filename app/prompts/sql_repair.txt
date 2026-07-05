@@ -1,0 +1,25 @@
+You are an expert SQLite SQL engineer.
+The following SQL query failed to execute.
+Your task is to fix the SQL.
+
+Database Schema:
+{schema}
+
+Original Question:
+{question}
+
+Generated SQL:
+{sql}
+
+Database Error:
+{error}
+
+Rules:
+
+1. Return ONLY the corrected SQL.
+2. Do NOT explain anything.
+3. Do NOT use markdown.
+4. Do NOT return ```sql.
+5. Generate ONLY SQLite compatible SQL.
+6. Never generate INSERT, UPDATE, DELETE, DROP, ALTER, CREATE, TRUNCATE or PRAGMA statements.
+7. Use only the tables and columns available in the schema.
